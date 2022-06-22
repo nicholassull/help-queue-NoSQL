@@ -33,16 +33,16 @@ componentWillUnmount(){
   clearInterval(this.waitTimeUpdateTimer);
 }
 
-updateTicketElapsedWaitTime = () => {
-  const { dispatch } = this.props;
-  //Itterates over an array of tickets made by Object.values and updates wait time.
-  Object.values(this.props.mainTicketList).forEach(ticket => {
-    //fromNow is a method of a Moment object (timeOpen).
-    const newFormattedWaitTime = ticket.timeOpen.fromNow(true);
-    const action = a.updateTime(ticket.id, newFormattedWaitTime);
-    dispatch(action);
-  });
-}
+// updateTicketElapsedWaitTime = () => {
+//   const { dispatch } = this.props;
+//   //Itterates over an array of tickets made by Object.values and updates wait time.
+//   Object.values(this.props.mainTicketList).forEach(ticket => {
+//     //fromNow is a method of a Moment object (timeOpen).
+//     const newFormattedWaitTime = ticket.timeOpen.fromNow(true);
+//     const action = a.updateTime(ticket.id, newFormattedWaitTime);
+//     dispatch(action);
+//   });
+// }
 
   handleClick = () => {
     if (this.state.selectedTicket != null) {
@@ -124,13 +124,11 @@ updateTicketElapsedWaitTime = () => {
 }
 
 TicketControl.propTypes = {
-  mainTicketList: PropTypes.object,
   formVisibleOnPage: PropTypes.bool
 }
 
 const mapStateToProps = state => {
   return {
-    mainTicketList: state.mainTicketList,
     formVisibleOnPage: state.formVisibleOnPage
   }
 }
