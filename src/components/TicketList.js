@@ -9,7 +9,7 @@ function TicketList(props){
   useFirestoreConnect([
     { collection: 'tickets'}
   ]);
-
+  // Grabs 
   const tickets = useSelector(state => state.firestore.ordered.tickets);
 
   if (isLoaded(tickets)) {

@@ -6,6 +6,8 @@ import TicketDetail from './TicketDetail';
 import EditTicketForm from './EditTicketForm';
 import PropTypes from "prop-types";
 import * as a from './../actions';
+import { withFirestore } from 'react-redux-firebase';
+
 // import Moment from 'moment';
 
 class TicketControl extends React.Component {
@@ -62,8 +64,15 @@ updateTicketElapsedWaitTime = () => {
   }
 
   handleChangingSelectedTicket = (id) => {
-    const selectedTicket = this.props.mainTicketList[id];
-    this.setState({selectedTicket: selectedTicket});
+    this.props.firestore.get({collection: 'tickets', doc: id}).then((ticket) => {
+      const firestoreTicket = {
+        names: ticket.get("names"),
+        location: ticket.get("location"),
+        issue: ticket.get("issue"),
+        id: ticket.id
+      }
+      this.setState({selectedTicket: firestoreTicket });
+    });
   }
 
   handleDeletingTicket = (id) => {
@@ -106,7 +115,7 @@ updateTicketElapsedWaitTime = () => {
       currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList}  />;
       buttonText = "Return to Ticket List";
     } else {
-      currentlyVisibleState = <TicketList ticketList={this.props.mainTicketList} onTicketSelection={this.handleChangingSelectedTicket} />;
+      currentlyVisibleState = <TicketList onTicketSelection={this.handleChangingSelectedTicket} />;
       buttonText = "Add Ticket";
     }
     return (
@@ -133,4 +142,6 @@ const mapStateToProps = state => {
 
 TicketControl = connect(mapStateToProps)(TicketControl);
 
-export default TicketControl;
+// export default TicketControl;
+
+export default withFirestore(TicketControl);
