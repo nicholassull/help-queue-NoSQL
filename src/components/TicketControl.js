@@ -21,17 +21,17 @@ class TicketControl extends React.Component {
     };
   }
 
-componentDidMount() {
-  this.waitTimeUpdateTimer = setInterval(() =>
-    this.updateTicketElapsedWaitTime(),
-  60000
-  );
-}
+// componentDidMount() {
+//   this.waitTimeUpdateTimer = setInterval(() =>
+//     this.updateTicketElapsedWaitTime(),
+//   60000
+//   );
+// }
 
-componentWillUnmount(){
-  console.log("component unmounted!");
-  clearInterval(this.waitTimeUpdateTimer);
-}
+// componentWillUnmount(){
+//   console.log("component unmounted!");
+//   clearInterval(this.waitTimeUpdateTimer);
+// }
 
 // updateTicketElapsedWaitTime = () => {
 //   const { dispatch } = this.props;
