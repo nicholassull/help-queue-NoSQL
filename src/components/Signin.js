@@ -1,5 +1,6 @@
 import React from "react";
 import firebase from "firebase/app";
+import "firebase/auth";
 
 function Signin() {
 
@@ -8,8 +9,7 @@ function Signin() {
     const email = event.target.email.value;
     const password = event.target.password.value;
     
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(function() {
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(function() {
       console.log("successfully signed up!");
     }).catch(function(error) {
       console.log(error.message);
@@ -18,7 +18,7 @@ function Signin() {
 
   return (
     <React.Fragment>
-      <h1>Sign In</h1>
+      <h1>Sign up</h1>
       <form onSubmit={doSignUp}>
         <input type="text"
         name='email'
@@ -28,8 +28,10 @@ function Signin() {
         placeholder="Password"/>
         <button type="submit">Sign up</button>
       </form>
+
+
     </React.Fragment>
   );
 }
 
-export default Signin
+export default Signin;
