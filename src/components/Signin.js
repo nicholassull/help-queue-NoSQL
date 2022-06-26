@@ -26,9 +26,17 @@ function Signin() {
     });
   }
 
+  function doSignOut() {
+    firebase.auth().signOut().then(function() {
+      console.log("Successfully signed out!");
+    }).catch(function(error) {
+      console.log(error.message);
+    });
+  }
+
   return (
     <React.Fragment>
-      <h1>Sign up</h1>
+      <h1>Sign Up</h1>
       <form onSubmit={doSignUp}>
         <input type="text"
         name='email'
@@ -38,6 +46,7 @@ function Signin() {
         placeholder="Password"/>
         <button type="submit">Sign up</button>
       </form>
+
       <h1>Sign In</h1>
       <form onSubmit={doSignIn}>
         <input type="text"
@@ -49,6 +58,8 @@ function Signin() {
         <button type="submit">Sign in</button>
       </form>
 
+      <h1>Sign Out</h1>
+      <button onClick={doSignOut}>Sign out</button>
     </React.Fragment>
   );
 }
