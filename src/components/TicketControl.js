@@ -6,7 +6,7 @@ import TicketDetail from './TicketDetail';
 import EditTicketForm from './EditTicketForm';
 import PropTypes from "prop-types";
 import * as a from './../actions';
-import { withFirestore } from 'react-redux-firebase';
+import { withFirestore, isLoaded } from 'react-redux-firebase';
 
 // import Moment from 'moment';
 
@@ -20,29 +20,6 @@ class TicketControl extends React.Component {
       editing: false
     };
   }
-
-// componentDidMount() {
-//   this.waitTimeUpdateTimer = setInterval(() =>
-//     this.updateTicketElapsedWaitTime(),
-//   60000
-//   );
-// }
-
-// componentWillUnmount(){
-//   console.log("component unmounted!");
-//   clearInterval(this.waitTimeUpdateTimer);
-// }
-
-// updateTicketElapsedWaitTime = () => {
-//   const { dispatch } = this.props;
-//   //Itterates over an array of tickets made by Object.values and updates wait time.
-//   Object.values(this.props.mainTicketList).forEach(ticket => {
-//     //fromNow is a method of a Moment object (timeOpen).
-//     const newFormattedWaitTime = ticket.timeOpen.fromNow(true);
-//     const action = a.updateTime(ticket.id, newFormattedWaitTime);
-//     dispatch(action);
-//   });
-// }
 
   handleClick = () => {
     if (this.state.selectedTicket != null) {
@@ -94,31 +71,50 @@ class TicketControl extends React.Component {
   }
 
   render(){
-    let currentlyVisibleState = null;
-    let buttonText = null;
-    if (this.state.editing ) {      
-      currentlyVisibleState = <EditTicketForm ticket = {this.state.selectedTicket} onEditTicket = {this.handleEditingTicketInList} />
-      buttonText = "Return to Ticket List";
-    } else if (this.state.selectedTicket != null) {
-      currentlyVisibleState = 
-      <TicketDetail 
-        ticket = {this.state.selectedTicket} 
-        onClickingDelete = {this.handleDeletingTicket} 
-        onClickingEdit = {this.handleEditClick} />
-      buttonText = "Return to Ticket List";
-    } else if (this.props.formVisibleOnPage) {
-      currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList}  />;
-      buttonText = "Return to Ticket List";
-    } else {
-      currentlyVisibleState = <TicketList onTicketSelection={this.handleChangingSelectedTicket} />;
-      buttonText = "Add Ticket";
+    //Determines the authentication status of the client.
+    const auth = this.props.firebase.auth();
+    //Show 'Loading...' if user authorization is still loading, indicate that the user must be signed in to see tickets, and show tickets if user is signed in.
+    if (!isLoaded(auth)) {
+      return (
+        <React.Fragment>
+          <h1>Loading...</h1>
+        </React.Fragment>
+      )
     }
-    return (
-      <React.Fragment>
-        {currentlyVisibleState}
-        <button onClick={this.handleClick}>{buttonText}</button>
-      </React.Fragment>
-    );
+    if ((isLoaded(auth)) && (auth.currentUser == null)) {
+      return (
+        <React.Fragment>
+          <h1>You must be signed in to access the queue.</h1>
+        </React.Fragment>
+      )
+    }
+    if ((isLoaded(auth)) && (auth.currentUser != null)) {
+      let currentlyVisibleState = null;
+      let buttonText = null;
+      if (this.state.editing ) {      
+        currentlyVisibleState = <EditTicketForm ticket = {this.state.selectedTicket} onEditTicket = {this.handleEditingTicketInList} />
+        buttonText = "Return to Ticket List";
+      } else if (this.state.selectedTicket != null) {
+        currentlyVisibleState = 
+        <TicketDetail 
+          ticket = {this.state.selectedTicket} 
+          onClickingDelete = {this.handleDeletingTicket} 
+          onClickingEdit = {this.handleEditClick} />
+        buttonText = "Return to Ticket List";
+      } else if (this.props.formVisibleOnPage) {
+        currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList}  />;
+        buttonText = "Return to Ticket List";
+      } else {
+        currentlyVisibleState = <TicketList onTicketSelection={this.handleChangingSelectedTicket} />;
+        buttonText = "Add Ticket";
+      }
+      return (
+        <React.Fragment>
+          {currentlyVisibleState}
+          <button onClick={this.handleClick}>{buttonText}</button>
+        </React.Fragment>
+      );
+    }
   }
 
 }
@@ -135,6 +131,5 @@ const mapStateToProps = state => {
 
 TicketControl = connect(mapStateToProps)(TicketControl);
 
-// export default TicketControl;
-
+//withFirestore is a HOC that provides access to this.props.firestore and this.props.firebase to the entire component
 export default withFirestore(TicketControl);
