@@ -18,6 +18,7 @@ const rrfProps = {
   firebase,
   config: {
     userProfile: "users",
+    //Allows us to check the auth state throughout the application.
     useFirestoreForProfile: true,
   },
   dispatch: store.dispatch,
