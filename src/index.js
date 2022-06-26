@@ -9,7 +9,7 @@ import rootReducer from './reducers';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 import { createFirestoreInstance } from 'redux-firestore';
 import firebase from "./firebase";
-import 'firebase/auth';
+import 'firebase/compat/auth';
 
 //Instantiates the redux store using our ticket reducer.
 const store = createStore(rootReducer);
