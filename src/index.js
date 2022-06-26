@@ -9,6 +9,7 @@ import rootReducer from './reducers';
 import { ReactReduxFirebaseProvider } from 'react-redux-firebase';
 import { createFirestoreInstance } from 'redux-firestore';
 import firebase from "./firebase";
+import 'firebase/auth';
 
 //Instantiates the redux store using our ticket reducer.
 const store = createStore(rootReducer);
@@ -16,7 +17,8 @@ const store = createStore(rootReducer);
 const rrfProps = {
   firebase,
   config: {
-    userProfile: "users"
+    userProfile: "users",
+    useFirestoreForProfile: true,
   },
   dispatch: store.dispatch,
   createFirestoreInstance
